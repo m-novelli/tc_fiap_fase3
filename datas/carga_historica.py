@@ -3,6 +3,10 @@ import pandas as pd
 import boto3
 from io import BytesIO
 from datetime import datetime
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 def buscar_dados_historicos(tickers, start, end, intervalo='1d'):
     frames = []
@@ -37,7 +41,10 @@ def salvar_em_s3_particionado(df, bucket):
         raise ValueError("Coluna 'Date' não encontrada no DataFrame.")
 
     df['Date'] = pd.to_datetime(df['Date'])
-    s3 = boto3.client('s3')
+    s3 = boto3.client( 's3',
+        aws_access_key_id=os.getenv("AWS_ACCESS_KEY_ID"),
+        aws_secret_access_key=os.getenv("AWS_SECRET_ACCESS_KEY")
+    )
 
     for (ticker, ano), grupo in df.groupby(["ticker", df['Date'].dt.year]):
         path = f"dados_financeiros/ticker={ticker}/year={ano}/dados.parquet"
@@ -46,14 +53,17 @@ def salvar_em_s3_particionado(df, bucket):
         grupo.to_parquet(parquet_buffer, index=False, engine='pyarrow', compression='snappy')
         parquet_buffer.seek(0)
 
-        s3.put_object(Bucket=bucket, Key=path, Body=parquet_buffer.getvalue())
-        print(f"✅ Salvo: s3://{bucket}/{path}")
+        try:
+            s3.put_object(Bucket=bucket, Key=path, Body=parquet_buffer.getvalue())
+            print(f"Salvo: s3://{bucket}/{path}")
+        except Exception as e:
+            print(f"Erro ao salvar {path}: {e}")
 
 def executar_pipeline_historica():
     tickers = ['AAPL','GOOG','AMZN', 'NFLX', 'MSFT', 'IBM','^GSPC'] 
     start = "2007-01-01"  
     end = datetime.now().strftime("%Y-%m-%d") 
-    bucket = "fiap-tch3-mlet-mn"  
+    bucket = "fiap-tch3-mlet"  
 
     df = buscar_dados_historicos(tickers, start, end, intervalo="1d")
     if not df.empty:

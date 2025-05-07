@@ -1,0 +1,5 @@
+yfinance
+pandas
+boto3
+pyarrow
+python-dotenv
