@@ -3,7 +3,7 @@
 
 # Análise e Interpretação dos Resultados da Otimização de Portfólio
 
-Este documento apresenta uma análise detalhada dos resultados obtidos a partir das estratégias de otimização de portfólio de Markowitz e Machine Learning, conforme os arquivos JSON fornecidos (`markowitz_full_script_results.json` e `ml_full_script_results.json`). O objetivo é fornecer comentários e interpretações que possam auxiliar na compreensão e apresentação desses resultados.
+Este documento apresenta uma análise detalhada dos resultados obtidos a partir das estratégias de otimização de portfólio de Markowitz e Machine Learning
 
 ## 1. Considerações Iniciais
 
@@ -130,19 +130,12 @@ O backtest da estratégia de ML, conforme implementado no script, normalmente en
 *   A performance superior de Markowitz no backtest pode ser, em parte, devido ao fato de que os pesos foram otimizados usando informações de todo o período histórico para definir uma única carteira "buy-and-hold" para o backtest. Em uma aplicação real, a otimização de Markowitz também poderia ser refeita periodicamente (rebalanceamento), o que poderia levar a resultados diferentes.
 *   A estratégia de ML, por sua natureza, é adaptativa (se rebalanceada com novas previsões). Sua performance depende da qualidade das previsões do modelo e da frequência de rebalanceamento. O resultado aqui mostra que, para este conjunto de dados e modelos, a abordagem de Markowitz (com otimização única para o período) foi superior.
 
-## 5. Conclusões e Recomendações para Apresentação
+## 5. Conclusões e Recomendações
 
 *   **Ambas as estratégias demonstraram capacidade de gerar retornos positivos e significativos** ao longo do extenso período de backtest, com Índices de Sharpe considerados bons (próximos ou acima de 1).
 *   A **estratégia de Markowitz, com pesos fixos otimizados, superou a estratégia de Machine Learning** em termos de retorno total, retorno anualizado e Índice de Sharpe no período de backtest analisado.
 *   A **estratégia de Machine Learning resultou em um portfólio ligeiramente menos volátil** e com uma alocação de ativos mais diversificada.
-*   **Ambas as estratégias foram expostas a drawdowns máximos severos (>50%)**, o que é um ponto crucial a ser destacado sobre o risco de investir em portfólios de ações, mesmo os otimizados, especialmente em períodos longos que incluem crises financeiras.
 
-**Para sua apresentação, você pode destacar:**
-1.  A explicação de cada métrica (Retorno Anualizado, Volatilidade, Sharpe, Max Drawdown) e o que ela representa para o investidor.
-2.  A diferença na filosofia de alocação: Markowitz buscando a eficiência histórica ótima, ML buscando adaptar-se com base em previsões.
-3.  A comparação direta dos resultados, como na tabela acima.
-4.  A importância do Máximo Drawdown como uma medida realista do risco de perda que um investidor poderia enfrentar.
-5.  Discutir possíveis razões para a diferença de desempenho, como a natureza da otimização de Markowitz (se foi única para todo o período) versus a natureza adaptativa do ML.
-6.  Mencionar que os resultados do backtest são baseados em dados históricos e não garantem desempenho futuro.
 
-Espero que esta análise detalhada seja útil! Se precisar de mais esclarecimentos sobre algum ponto específico, me diga.
+
+

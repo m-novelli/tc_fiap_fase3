@@ -6,7 +6,7 @@ from datetime import datetime
 import pytz
 
 # Parâmetros globais
-TICKERS = ["AAPL", "MSFT", "GOOG"]  
+TICKERS = ['AAPL','GOOG','AMZN', 'NFLX', 'MSFT', 'IBM','^GSPC']  
 BUCKET_NAME = "fiap-tch3-mlet"
 INTERVAL = "1m"  # Coleta por minuto
 START_OFFSET_MINUTES = 2  # Evita pegar minuto atual incompleto

@@ -5,22 +5,6 @@ Este script implementa e demonstra duas abordagens principais para a otimizaçã
 1.  Teoria Moderna do Portfólio (Markowitz): Busca maximizar o Índice de Sharpe, encontrando a alocação ótima de ativos que oferece o maior retorno para um dado nível de risco (ou o menor risco para um dado retorno).
 2.  Otimização com Machine Learning: Utiliza modelos de Machine Learning (Random Forest Regressor) para prever os retornos futuros dos ativos e, com base nessas previsões, determinar os pesos do portfólio.
 
-O script é projetado para ser didático, com comentários detalhados explicando cada etapa do processo, a lógica por trás das funções e a fundamentação teórica mínima necessária para compreensão.
-
-Como usar:
-1.  Certifique-se de ter as bibliotecas listadas abaixo instaladas (pandas, numpy, matplotlib, seaborn, scipy, scikit-learn).
-    Você pode instalá-las via pip: pip install pandas numpy matplotlib seaborn scipy scikit-learn
-2.  Prepare seu DataFrame `df_total` com os dados históricos dos ativos. Ele deve conter as colunas:
-    -   'Date': Data da cotação (deve ser conversível para o formato datetime).
-    -   'Close': Preço de fechamento ajustado do ativo.
-    -   'High': Preço máximo do dia (opcional, não usado diretamente na otimização principal, mas comum em dados financeiros).
-    -   'Low': Preço mínimo do dia (opcional).
-    -   'Open': Preço de abertura do dia (opcional).
-    -   'Volume': Volume de negociação (opcional).
-    -   'ticker': Símbolo/identificador do ativo (ex: 'AAPL', 'GOOG').
-3.  Na seção `main_example_run()`, substitua a chamada `create_simulated_df_total()` pelo carregamento do seu `df_total` real.
-4.  Ajuste as listas `USER_TICKERS` e `BENCHMARK_TICKER` conforme os ativos que deseja analisar.
-5.  Execute o script. Os resultados, incluindo pesos ótimos e métricas de backtesting, serão impressos no console e salvos em arquivos JSON.
 
 Fundamentação Teórica Breve:
 
@@ -46,20 +30,18 @@ Backtesting:
 """
 
 # Importação das bibliotecas padrão e de terceiros necessárias para o script.
-import numpy as np  # Biblioteca para computação numérica, essencial para cálculos com arrays e matrizes.
-import pandas as pd # Biblioteca para manipulação e análise de dados, especialmente com DataFrames.
-import matplotlib.pyplot as plt # Biblioteca para criação de gráficos e visualizações estáticas.
-import seaborn as sns # Biblioteca baseada no matplotlib para visualizações estatísticas mais atraentes.
-from scipy.optimize import minimize # Função do SciPy para encontrar o mínimo de uma função, usada na otimização de Markowitz.
-from sklearn.ensemble import RandomForestRegressor # Modelo de Machine Learning (Random Forest) para regressão.
-from sklearn.model_selection import train_test_split # Função para dividir dados em conjuntos de treino e teste.
-from sklearn.metrics import mean_squared_error, r2_score # Métricas para avaliar modelos de regressão.
-import datetime # Módulo para trabalhar com datas e horas.
-import json # Módulo para trabalhar com dados no formato JSON (usado para salvar resultados).
+import numpy as np  
+import pandas as pd 
+import matplotlib.pyplot as plt
+import seaborn as sns
+from scipy.optimize import minimize 
+from sklearn.ensemble import RandomForestRegressor 
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_squared_error, r2_score
+import datetime 
+import json 
 
 # --- Configurações Globais --- 
-# Estas configurações podem ser ajustadas conforme a necessidade.
-# Taxa livre de risco anual (ex: rendimento de um título do governo considerado seguro).
 # Usada no cálculo do Índice de Sharpe. Um valor comum é 2% (0.02).
 RISK_FREE_RATE = 0.02
 
@@ -75,10 +57,7 @@ class PortfolioOptimizer:
         Inicializa o otimizador de portfólio.
 
         Args:
-            df_total_data (pd.DataFrame): DataFrame contendo os dados históricos dos ativos e do benchmark.
-                                          Deve conter, no mínimo, as colunas: 'Date' (data da cotação),
-                                          'Close' (preço de fechamento ajustado), e 'ticker' (símbolo do ativo).
-                                          A coluna 'Date' deve ser conversível para o formato datetime do pandas.
+            df_total_data (pd.DataFrame): DataFrame contendo os dados históricos dos ativos e do benchmark
             tickers_list (list): Lista de strings contendo os tickers (símbolos) dos ativos
                                  que farão parte do portfólio a ser otimizado.
             benchmark_ticker (str): String do ticker do ativo que será usado como benchmark
@@ -693,7 +672,7 @@ class PortfolioOptimizer:
             print(f"Erro ao salvar os resultados em JSON: {e}")
             return None
 
-# --- Funções Auxiliares e Exemplo de Execução ---
+
 
 
 
