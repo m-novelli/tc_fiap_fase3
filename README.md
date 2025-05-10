@@ -33,8 +33,8 @@ Projeto de pós-graduação em Machine Learning Engineering com foco em ingestã
 ### 1. Clone o repositório
 
 ```bash
-git clone https://github.com/seu-usuario/nome-do-repo.git
-cd nome-do-repo
+git clone https://github.com/m-novelli/tc_fiap_fase3
+cd tc_fiap_fase3
 ```
 
 ### 2. Instale as dependências
@@ -76,7 +76,7 @@ python models/ML_otimizacao_portfolio.py
 ```
 
 
-## 📊 Principais Entregas
+## Principais Entregas
 
 - Análise exploratória completa com:
   - Retorno, volatilidade, drawdown, correlação e decomposição
@@ -86,6 +86,13 @@ python models/ML_otimizacao_portfolio.py
 - Dois modelos testados:
   - **Markowitz (Modern Portfolio Theory)**
   - **Random Forest Regressor (ML)**
+
+## Próximos Passos
+
+  Apesar de termos testado essas abordagens separadamente, vemos valor em combiná-las.
+  
+  A ideia seria usar o ML para prever os retornos futuros, com dados mais atuais e técnicos.
+  E usar essas previsões como entrada no modelo de Markowitz, que ainda cuidaria da parte de alocação e controle de risco.
 
 ---
 
