@@ -59,6 +59,8 @@ def salvar_em_s3_particionado(df, bucket):
         except Exception as e:
             print(f"Erro ao salvar {path}: {e}")
 
+
+
 def executar_pipeline_historica():
     tickers = ['AAPL','GOOG','AMZN', 'NFLX', 'MSFT', 'IBM','^GSPC'] 
     start = "2007-01-01"  

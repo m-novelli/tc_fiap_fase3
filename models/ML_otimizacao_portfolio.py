@@ -703,42 +703,58 @@ def main_example_run():
     # IMPORTANTE: Substitua esta linha pelo carregamento do seu DataFrame `df_total` real.
     # Exemplo: df_total = pd.read_csv('caminho/para/seu/arquivo_de_dados.csv')
     # Certifique-se que seu df_total tenha as colunas 'Date', 'Close', 'ticker' e outras opcionais.
-    import s3fs
-    import pyarrow.parquet as pq
+    #import s3fs
+    #import pyarrow.parquet as pq
 
    # Carregando a df_total
-    bucket_name = 'fiap-tch3-mlet'
-    prefix = 'dados_financeiros/'
+    #bucket_name = 'fiap-tch3-mlet'
+    #prefix = 'dados_financeiros/'
 
     # Inicializa o sistema de arquivos S3
-    fs = s3fs.S3FileSystem()
+    #fs = s3fs.S3FileSystem()
 
     # Lista todos os arquivos Parquet dentro do prefixo
-    arquivos = fs.glob(f'{bucket_name}/{prefix}**/dados.parquet')
-    print(f"Arquivos encontrados: {len(arquivos)}")
+    #arquivos = fs.glob(f'{bucket_name}/{prefix}**/dados.parquet')
+    #print(f"Arquivos encontrados: {len(arquivos)}")
 
     # Agora, carrega todos os arquivos e junta
-    dfs = []
+    #dfs = []
 
-    for arquivo in arquivos:
-        print(f"Lendo {arquivo}...")
+    #for arquivo in arquivos:
+    #    print(f"Lendo {arquivo}...")
 
         # Abrir o arquivo
-        with fs.open(arquivo) as f:
-            table = pq.read_table(f)
-            df_temp = table.to_pandas()  # Sem types_mapper aqui
+    #    with fs.open(arquivo) as f:
+    #        table = pq.read_table(f)
+    #        df_temp = table.to_pandas()  # Sem types_mapper aqui
 
         # Agora, converte a coluna 'ticker' para string
-        if 'ticker' in df_temp.columns:
-            df_temp['ticker'] = df_temp['ticker'].astype(str)
+    #    if 'ticker' in df_temp.columns:
+    #        df_temp['ticker'] = df_temp['ticker'].astype(str)
 
-        dfs.append(df_temp)
+    #    dfs.append(df_temp)
 
-    df_total = pd.concat(dfs, ignore_index=True)
+    #df_total = pd.concat(dfs, ignore_index=True)
 
-    if 'df_total' not in locals() or df_total.empty:
-        print("O DataFrame `df_total` não foi carregado corretamente do S3 ou está vazio. A execução será abortada.")
-        return
+    #if 'df_total' not in locals() or df_total.empty:
+    #    print("O DataFrame `df_total` não foi carregado corretamente do S3 ou está vazio. A execução será abortada.")
+    #    return
+
+    #Para usar a base localmente
+
+    
+
+    df_total = pd.read_csv('C:/Users/mahno/Git/tc_fiap_fase3/datas/dados_base.csv')
+
+    #Ajustar os tipos de colunas
+    df_total['Date'] = pd.to_datetime(df_total['Date'])
+    df_total['Close'] = df_total['Close'].astype(float)
+    df_total['High'] = df_total['High'].astype(float)
+    df_total['Low'] = df_total['Low'].astype(float)
+    df_total['Open'] = df_total['Open'].astype(float)
+    df_total['Volume'] = df_total['Volume'].astype(int)
+    df_total['ticker'] = df_total['ticker'].astype(str)
+
 
     # --- 3. Inicialização do Otimizador ---
     try:
