@@ -744,7 +744,7 @@ def main_example_run():
 
     
 
-    df_total = pd.read_csv('C:/Users/mahno/Git/tc_fiap_fase3/datas/dados_base.csv')
+    df_total = pd.read_csv('/datas/dados_base.csv')
 
     #Ajustar os tipos de colunas
     df_total['Date'] = pd.to_datetime(df_total['Date'])
