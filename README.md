@@ -18,6 +18,7 @@ Projeto de pós-graduação em Machine Learning Engineering com foco em ingestã
 ## 📁 Estrutura do Projeto
 
 ```
+📂 api/                                     # API para execução do modelo através da API
 📂 data/                                    # Script que faz a consulta dos dados do yfinance e alimenta o data lake na s3
 📂 models/                                  # Scripts para modelos de previsão e resultados
 📄 requirements.txt                         # Dependências do projeto
