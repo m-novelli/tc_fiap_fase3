@@ -4,3 +4,6 @@ __pycache__/
 *.parquet
 ml_api_venv/
 /api/logs
+
+git remote set-url origin git@github-smatioli:m-novelli/tc_fiap_fase3.git
+
