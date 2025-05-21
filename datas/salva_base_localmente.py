@@ -35,11 +35,8 @@ def salvar_localmente(df, caminho='datas/dados_base.csv'):
     df.to_csv(caminho, index=False)
     print(f"Base salva localmente em: {caminho}")
 
-def executar_pipeline_local():
-    tickers = ['AAPL','GOOG','AMZN', 'NFLX', 'MSFT', 'IBM','^GSPC']
-    start = "2007-01-01"
-    end = datetime.now().strftime("%Y-%m-%d")
-
+def executar_pipeline_local(tickers, start, end):
+    
     df = buscar_dados_historicos(tickers, start, end, intervalo="1d")
     if not df.empty:
         print("Estrutura final dos dados:")
@@ -50,4 +47,8 @@ def executar_pipeline_local():
         print("Nenhum dado para salvar.")
 
 if __name__ == "__main__":
-    executar_pipeline_local()
+    tickers = ['AAPL','GOOG','AMZN', 'NFLX', 'MSFT', 'IBM','^GSPC']
+    start = "2007-01-01"
+    end = datetime.now().strftime("%Y-%m-%d")
+    executar_pipeline_local(tickers, start, end)
+
