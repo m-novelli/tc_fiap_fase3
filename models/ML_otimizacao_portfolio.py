@@ -88,12 +88,9 @@ class PortfolioOptimizer:
         2.  Verifica se as colunas necessárias ('Date', 'Close', 'ticker') existem.
         3.  Converte a coluna 'Date' para o formato datetime.
         4.  Filtra o DataFrame para manter apenas os tickers relevantes (ativos do portfólio + benchmark).
-        5.  Transforma o DataFrame do formato 'long' (onde cada linha é uma observação de um ticker em uma data)
-            para o formato 'wide' (onde as datas são o índice e cada ticker é uma coluna com seus preços).
-            Esta transformação usa a função `pivot`.
+        5.  Transforma o DataFrame do formato 'long' 
         6.  Verifica se todos os tickers esperados (ativos e benchmark) estão presentes após o pivot.
         7.  Preenche valores ausentes (NaN) usando forward fill (`ffill`) e depois backward fill (`bfill`).
-            Isso é importante para garantir a continuidade dos dados de preço.
         8.  Calcula os retornos percentuais diários (`pct_change`) a partir dos preços de fechamento.
         9.  Remove quaisquer linhas com NaN resultantes do cálculo de `pct_change` (geralmente a primeira linha).
         10. Separa os retornos do benchmark dos retornos dos ativos do portfólio.
@@ -107,7 +104,7 @@ class PortfolioOptimizer:
                         ou se os DataFrames de preços ou retornos ficarem vazios após o processamento.
         """
         print("Carregando e processando dados do DataFrame fornecido...")
-        df = self.df_total.copy() # Trabalha com uma cópia para não alterar o original.
+        df = self.df_total.copy() 
 
         # Verificação das colunas obrigatórias
         required_cols = ['Date', 'Close', 'ticker']
