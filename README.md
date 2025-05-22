@@ -20,9 +20,8 @@ Projeto de pós-graduação em Machine Learning Engineering com foco em ingestã
 ```
 📂 api/                                    # Aplicação que executa o modelo de ML através da API
 📂 data/                                    # Script que faz a consulta dos dados do yfinance e alimenta o data lake na s3
-📂 models/                                  # Scripts para modelos de previsão e resultados
+📂 models/                                  # Analise Exploratoria e Scripts para modelos de previsão e resultados
 📄 requirements.txt                         # Dependências do projeto
-📄 EDA.py                                   # Script com análise exploratória completa
 📄 Análise e Interpretação.md               # Análise e Interpretação dos resultados do modelo escolhido
 📄 README.md                                # Documentação do projeto
 ```
@@ -61,39 +60,31 @@ python datas/carga_historica.py
 
 ### 4. Análise exploratória
 
-Esta etapa foi feita no notebook EDA.ipynb, onde exploramos a base histórica, trouxemos novas variáveis e visualizações para emabasar a modelagem pretidiva
+Esta etapa foi feita no notebook 0.Analise Exploratoria.ipynb, onde exploramos a base histórica, trouxemos novas variáveis e visualizações para emabasar a modelagem pretidiva
 
 ### 5. Modelagem
 
-Em /models, temos 3 arquivos, dois foram modelos de ML para previsão de preço e previsão de retorno.
-O modelo escolhido está no script models/ML_otimizacao_portfolio.py e é um modelo de otimização de portfólio.
+Foram testados modelos como ARIMA, Random Forest e XGBoost para previsão de preço e retorno de ativos.
+O modelo Random Forest foi selecionado para previsão de retornos e passou por otimização de hiperparâmetros via Grid Search com validação temporal (TimeSeriesSplit), visando maximizar o desempenho preditivo em séries temporais.
 
-Testamos dois modelos distintos: Markowitx e ML (Random Forest Regressor) e fizemos análises comparativas entre eles.
-
-Para executar
-
-```bash
-python models/ML_otimizacao_portfolio.py
-```
+Modelo Final – Otimização de Portfólio com ML:
+A estratégia escolhida foi a otimização de portfólio com base nas previsões semanais de retorno geradas pelo modelo Random Forest ajustado.
+As previsões alimentam uma rotina de alocação ótima com foco em maximizar o retorno esperado ajustado ao risco.
 
 
 ## Principais Entregas
 
 - Análise exploratória completa com:
-  - Retorno, volatilidade, drawdown, correlação e decomposição
-  - Comparativo antes/depois de 2020
-  - Cálculo e visualização do índice de Sharpe
-
-- Dois modelos testados:
-  - **Markowitz (Modern Portfolio Theory)**
-  - **Random Forest Regressor (ML)**
+- Treinamento e seleção de Modelo de ML
+- Otimização de Portfólio com backtesting e cálculos de performance
+- Dump do modelo selecionado em .joblib para consumo da API
+- API que dá os pesos ótimos de cada ticker de tecnologia para maior retorno.
 
 ## Próximos Passos
 
-  Apesar de termos testado essas abordagens separadamente, vemos valor em combiná-las.
-  
-  A ideia seria usar o ML para prever os retornos futuros, com dados mais atuais e técnicos.
-  E usar essas previsões como entrada no modelo de Markowitz, que ainda cuidaria da parte de alocação e controle de risco.
+Implementar um backtest com rebalanceamento periódico, onde os pesos são recalculados ao longo do tempo, com base apenas nas informações disponíveis até cada momento.
+
+Treinar modelos para mais tickers, de forma que o usuário tenha liberdade de montar uma carteira mais diversificada e não somente baseada em tickers de tecnologia.
 
 ---
 
