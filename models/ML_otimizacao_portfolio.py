@@ -276,7 +276,7 @@ class PortfolioOptimizer:
             print(f"A otimização de Markowitz não convergiu. Mensagem do otimizador: {optimization_result.get('message', 'N/A')}")
             return None
 
-    def prepare_ml_features(self, window_size=30):
+    def prepare_ml_features(self, window_size=30,target_window=10):
         """
         Prepara as features (variáveis de entrada) e targets (variáveis de saída)
         para os modelos de Machine Learning.
@@ -345,7 +345,7 @@ class PortfolioOptimizer:
         for ticker in self.tickers_list:
             # O target é o retorno acumulado nos próximos 30 dias.
             # Usamos .shift(-30) para trazer os retornos futuros para a linha atual.
-            future_returns = self.returns_data[ticker].rolling(window=30).sum().shift(-30)
+            future_returns = self.returns_data[ticker].rolling(window=target_window).sum().shift(-target_window)
             targets_dict[ticker] = future_returns.loc[features_df.index] # Alinha os targets com o índice das features
         
         # Concatenar targets para remover NaNs de forma consistente

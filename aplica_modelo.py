@@ -19,7 +19,7 @@ optimizer = PortfolioOptimizer(df, tickers_2, '^GSPC')
 
 optimizer.load_data()
 
-features_df, targets_dict = optimizer.prepare_ml_features()
+features_df, targets_dict = optimizer.prepare_ml_features(target_window=10)
 
 models_dict = optimizer.read_joblib()
 
