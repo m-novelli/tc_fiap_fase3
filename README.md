@@ -1,4 +1,4 @@
-# Tech Challenge Fase 3 - Ingestão de dados + ML
+# Tech Challenge Fase 3 - Ingestão de dados + ML + API
 
 Projeto de pós-graduação em Machine Learning Engineering com foco em ingestão de dados, desenvolvimento de um modelo de ML e uso produtivo dos resultados
 
