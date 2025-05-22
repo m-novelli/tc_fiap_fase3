@@ -1,5 +1,5 @@
 from datas.salva_base_localmente import buscar_dados_historicos
-from models.ML_otimizacao_portfolio import PortfolioOptimizer
+from models.PortfolioOptimizer import PortfolioOptimizer
 from datetime import datetime
 import pandas as pd
 

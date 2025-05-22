@@ -8,15 +8,6 @@ Este script implementa e demonstra duas abordagens principais para a otimizaçã
 
 Fundamentação Teórica Breve:
 
-Teoria Moderna do Portfólio (Markowitz):
--   Proposta por Harry Markowitz em 1952.
--   Princípio Chave: A diversificação (combinar ativos com baixa correlação) pode reduzir o risco total de um portfólio sem necessariamente sacrificar o retorno.
--   Conceitos Importantes:
-    -   Retorno Esperado: Média ponderada dos retornos esperados dos ativos individuais.
-    -   Risco (Volatilidade): Medido pelo desvio padrão dos retornos do portfólio. A covariância entre os retornos dos ativos é fundamental para calcular o risco do portfólio.
-    -   Fronteira Eficiente: Conjunto de portfólios ótimos que oferecem o máximo retorno para um dado nível de risco, ou o mínimo risco para um dado retorno.
-    -   Índice de Sharpe: Medida de retorno ajustado ao risco. Calculado como (Retorno do Portfólio - Taxa Livre de Risco) / Volatilidade do Portfólio. O objetivo é maximizá-lo.
-
 Otimização com Machine Learning:
 -   Abordagem: Utiliza modelos de ML para prever características futuras dos ativos (ex: retornos) e usa essas previsões para informar a alocação de ativos.
 -   Vantagens Potenciais: Pode capturar relações não lineares e padrões complexos que modelos tradicionais podem não identificar. Pode adaptar-se a mudanças nas condições de mercado se treinado e atualizado regularmente.
@@ -191,91 +182,7 @@ class PortfolioOptimizer:
         
         return portfolio_return, portfolio_volatility, sharpe_ratio
 
-    def negative_sharpe(self, weights):
-        """
-        Função objetivo para a otimização de Markowitz.
-        Como o otimizador `scipy.optimize.minimize` busca minimizar uma função,
-        e queremos maximizar o Índice de Sharpe, retornamos o negativo do Índice de Sharpe.
-
-        Args:
-            weights (np.array): Array com os pesos dos ativos.
-
-        Returns:
-            float: O valor negativo do Índice de Sharpe calculado para os pesos fornecidos.
-        """
-        _portfolio_return, _portfolio_volatility, sharpe_ratio = self.calculate_portfolio_performance(weights)
-        return -sharpe_ratio # Retorna o negativo para que o minimizador maximize o Sharpe Ratio.
-
-    def optimize_markowitz(self):
-        """
-        Implementa a otimização de portfólio de Markowitz para encontrar os pesos
-        que maximizam o Índice de Sharpe.
-
-        Utiliza o método SLSQP (Sequential Least SQuares Programming) do `scipy.optimize.minimize`,
-        que é adequado para problemas de otimização com restrições e limites.
-
-        Restrições:
-        1.  A soma de todos os pesos deve ser igual a 1 (type: 'eq', fun: lambda x: np.sum(x) - 1).
-        Limites (Bounds):
-        1.  Cada peso individual deve estar entre 0 e 1 (0 <= peso_i <= 1).
-            Isso significa que não permitimos venda a descoberto (short selling).
-
-        Returns:
-            dict or None: Um dicionário contendo os resultados da otimização (método, pesos, retorno,
-                          volatilidade, sharpe_ratio) se a otimização for bem-sucedida.
-                          Retorna None se a otimização falhar em convergir.
-        """
-        print("\n--- Iniciando Otimização de Portfólio (Markowitz) ---")
-        num_assets = len(self.tickers_list)
-        if num_assets == 0:
-            print("Nenhum ativo fornecido para otimização.")
-            return None
-
-        # Definir as restrições da otimização:
-        # A soma dos pesos deve ser 1.
-        constraints = ({'type': 'eq', 'fun': lambda x: np.sum(x) - 1})
-
-        # Definir os limites para cada peso (entre 0 e 1, inclusivo).
-        # Isso cria uma tupla de tuplas, onde cada tupla interna é (0, 1).
-        bounds = tuple((0, 1) for _ in range(num_assets))
-
-        # Pesos iniciais para o otimizador (distribuição igual entre os ativos).
-        initial_weights = np.array([1/num_assets] * num_assets)
-
-        # Executar a otimização
-        # O objetivo é minimizar a função `negative_sharpe`.
-        optimization_result = minimize(
-            fun=self.negative_sharpe,      # Função a ser minimizada.
-            x0=initial_weights,            # Chute inicial para os pesos.
-            method='SLSQP',                # Método de otimização.
-            bounds=bounds,                 # Limites para as variáveis (pesos).
-            constraints=constraints        # Restrições da otimização.
-        )
-
-        if optimization_result['success']:
-            optimal_weights = optimization_result['x'] # Pesos ótimos encontrados.
-            # Calcular as métricas de desempenho para os pesos ótimos.
-            returns, volatility, sharpe_ratio = self.calculate_portfolio_performance(optimal_weights)
-            
-            print("Otimização de Markowitz concluída com sucesso!")
-            print(f"  Retorno Esperado Anual do Portfólio: {returns:.4f}")
-            print(f"  Volatilidade Anual do Portfólio: {volatility:.4f}")
-            print(f"  Índice de Sharpe Anualizado: {sharpe_ratio:.4f}")
-            print("  Pesos Ótimos Encontrados:")
-            for ticker, weight in zip(self.tickers_list, optimal_weights):
-                print(f"    {ticker}: {weight:.4f}")
-            
-            return {
-                'method': 'Markowitz',
-                'weights': {ticker: weight for ticker, weight in zip(self.tickers_list, optimal_weights)},
-                'returns': returns,
-                'volatility': volatility,
-                'sharpe_ratio': sharpe_ratio
-            }
-        else:
-            print(f"A otimização de Markowitz não convergiu. Mensagem do otimizador: {optimization_result.get('message', 'N/A')}")
-            return None
-
+    
     def prepare_ml_features(self, window_size=30,target_window=10):
         """
         Prepara as features (variáveis de entrada) e targets (variáveis de saída)
@@ -363,67 +270,6 @@ class PortfolioOptimizer:
         print(f"Features e targets preparados. Shape das features: {features_df.shape}. Número de targets: {len(targets_dict)}.")
         return features_df, targets_dict
 
-    def train_ml_models(self, features_df, targets_dict):
-        """
-        Treina um modelo de Machine Learning (Random Forest Regressor) para cada ativo
-        para prever seus retornos futuros com base nas features preparadas.
-
-        Args:
-            features_df (pd.DataFrame): DataFrame com as features.
-            targets_dict (dict): Dicionário com as Series de targets para cada ativo.
-
-        Returns:
-            tuple: Uma tupla contendo:
-                - models_dict (dict): Dicionário onde as chaves são os tickers e os valores são os modelos treinados.
-                - performance_dict (dict): Dicionário com métricas de desempenho (MSE, R²) para cada modelo.
-                                          Retorna dicionários vazios se o treinamento não for possível.
-        """
-        print("\n--- Treinando Modelos de Machine Learning ---")
-        models_dict = {}
-        performance_dict = {}
-
-        if features_df.empty or not targets_dict:
-            print("Features ou targets estão vazios. Não é possível treinar modelos de ML.")
-            return models_dict, performance_dict
-
-        for ticker in self.tickers_list:
-            print(f"  Treinando modelo para o ativo: {ticker}...")
-            
-            if targets_dict[ticker].empty:
-                print(f"    Targets para {ticker} estão vazios. Pulando treinamento deste ativo.")
-                continue
-            
-            # Dividir os dados em conjuntos de treino e teste (80% treino, 20% teste)
-            # shuffle=False é importante para dados de séries temporais, para não usar dados futuros para treinar o passado.
-            X_train, X_test, y_train, y_test = train_test_split(
-                features_df, targets_dict[ticker], test_size=0.2, shuffle=False
-            )
-
-            if X_train.empty or y_train.empty:
-                print(f"    Dados de treino insuficientes para {ticker} após a divisão. Pulando.")
-                continue
-
-            # Inicializar e treinar o modelo Random Forest Regressor
-            # n_estimators: número de árvores na floresta.
-            # random_state: para reprodutibilidade.
-            # n_jobs=-1: usa todos os processadores disponíveis para o treinamento.
-            model = RandomForestRegressor(n_estimators=100, random_state=42, n_jobs=-1, oob_score=True)
-            model.fit(X_train, y_train)
-
-            # Avaliar o modelo no conjunto de teste
-            y_pred = model.predict(X_test)
-            mse = mean_squared_error(y_test, y_pred)
-            r2 = r2_score(y_test, y_pred)
-            oob = model.oob_score_ if hasattr(model, 'oob_score_') else 'N/A'
-
-            print(f"    Modelo para {ticker} treinado. MSE: {mse:.6f}, R²: {r2:.4f}, OOB Score: {oob if isinstance(oob, str) else f'{oob:.4f}'}")
-            
-            models_dict[ticker] = model
-            performance_dict[ticker] = {'mse': mse, 'r2': r2, 'oob_score': oob}
-    
-            joblib.dump(model, f"api/model/ml_model_{ticker}.joblib")
-        
-        return models_dict, performance_dict
     
     def read_joblib(self):
         models_dict = {}
