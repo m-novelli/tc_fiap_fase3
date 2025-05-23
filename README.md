@@ -1,4 +1,4 @@
-# Tech Challenge Fase 3 - Ingestão de dados + ML
+# Tech Challenge Fase 3 - Ingestão de dados + ML + API
 
 Projeto de pós-graduação em Machine Learning Engineering com foco em ingestão de dados, desenvolvimento de um modelo de ML e uso produtivo dos resultados
 
@@ -9,7 +9,8 @@ Projeto de pós-graduação em Machine Learning Engineering com foco em ingestã
 - Uso dos dados do yfinance de tickers de tecnologia (2007-2025)
 - Ingestão dos dados da API do yfinance em um data lake na s3
 - Análise exploratória dos dados
-- Desenvolvimento de Modelos de ML 
+- Desenvolvimento de Modelos de ML
+- Otimização de Portfólio
 - API para devolver o resultado do modelo
 
 
