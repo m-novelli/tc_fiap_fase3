@@ -45,7 +45,7 @@ class PortfolioOptimizer:
     otimizar com base em ML e realizar backtesting das estratégias.
     """
 
-    def __init__(self, df_total_data, tickers_list, benchmark_ticker, risk_free_rate=RISK_FREE_RATE):
+    def __init__(self, data_file, tickers_list, benchmark_ticker, risk_free_rate=RISK_FREE_RATE):
         """
         Inicializa o otimizador de portfólio.
 
@@ -58,8 +58,8 @@ class PortfolioOptimizer:
             risk_free_rate (float, optional): A taxa livre de risco anual. Padrão é o valor global RISK_FREE_RATE.
         """
         # Armazena os dados de entrada e parâmetros
-        self.df_total = df_total_data
-        self.tickers_list = tickers_list
+        self.df_total = self.get_data(data_file)
+        self.tickers_list = tickers_list.copy()  # Make a copy of the input list
         self.benchmark_ticker = benchmark_ticker
         self.risk_free_rate = risk_free_rate
 
@@ -70,6 +70,19 @@ class PortfolioOptimizer:
 
         # Chama o método para carregar e processar os dados assim que a classe é instanciada.
         self.load_data()
+    
+    @staticmethod
+    def get_data(data_file):
+        df_total = pd.read_csv(data_file)
+        #Ajustar os tipos de colunas
+        df_total['Date'] = pd.to_datetime(df_total['Date']) 
+        df_total['Close'] = df_total['Close'].astype(float)
+        df_total['High'] = df_total['High'].astype(float)
+        df_total['Low'] = df_total['Low'].astype(float)
+        df_total['Open'] = df_total['Open'].astype(float)
+        df_total['Volume'] = df_total['Volume'].astype(int)
+        df_total['ticker'] = df_total['ticker'].astype(str)
+        return df_total
 
     def load_data(self):
         """
@@ -104,7 +117,7 @@ class PortfolioOptimizer:
 
         # Conversão da coluna de data e filtragem por tickers relevantes
         df['Date'] = pd.to_datetime(df['Date'])
-        relevant_tickers = self.tickers_list + [self.benchmark_ticker]
+        relevant_tickers = self.tickers_list.copy() + [self.benchmark_ticker]
         df = df[df['ticker'].isin(relevant_tickers)]
 
         if df.empty:
@@ -274,10 +287,10 @@ class PortfolioOptimizer:
     def read_joblib(self):
         models_dict = {}
         
-        for filename in os.listdir('api/model'):
+        for filename in os.listdir('models/trained_models'):
             if filename.endswith('.joblib'):
                 model_name = os.path.splitext(filename)[0].replace("ml_model_", "")
-                model_path = os.path.join('api/model', filename)
+                model_path = os.path.join('models/trained_models', filename)
                 models_dict[model_name] = joblib.load(model_path)
 
         return models_dict

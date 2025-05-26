@@ -25,6 +25,7 @@ def buscar_dados_historicos(tickers, start, end, intervalo='1d'):
 
     if frames:
         df_final = pd.concat(frames, ignore_index=True)
+        print(f"Dados baixados: {df_final.shape}")
         return df_final
     else:
         print("Nenhum dado foi baixado.")
@@ -35,14 +36,13 @@ def salvar_localmente(df, caminho='datas/dados_base.csv'):
     df.to_csv(caminho, index=False)
     print(f"Base salva localmente em: {caminho}")
 
-def executar_pipeline_local(tickers, start, end):
+def executar_pipeline_local(tickers, start, end, caminho='datas/dados_base.csv'):
     
     df = buscar_dados_historicos(tickers, start, end, intervalo="1d")
     if not df.empty:
-        print("Estrutura final dos dados:")
-        print(df[['Date', 'ticker', 'Open', 'Close']].head())
-
-        salvar_localmente(df)
+        # print("Estrutura final dos dados:")
+        # print(df[['Date', 'ticker', 'Open', 'Close']].head())
+        salvar_localmente(df, caminho)
     else:
         print("Nenhum dado para salvar.")
 
