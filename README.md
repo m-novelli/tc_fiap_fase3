@@ -161,5 +161,4 @@ Implementar um backtest com rebalanceamento periódico, onde os pesos são recal
 Treinar modelos para mais tickers, de forma que o usuário tenha liberdade de montar uma carteira mais diversificada e não somente baseada em tickers de tecnologia.
 
 Tornar a lista de tickers dinâmica, para que o usuário possa escolher quais tickers deseja incluir na carteira.
----
 
